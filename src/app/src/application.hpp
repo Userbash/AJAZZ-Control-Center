@@ -23,13 +23,13 @@
 #include "firmware_update_service.hpp"
 #include "lighting_service.hpp"
 #include "loaded_plugins_model.hpp"
+#include "mouse_service.hpp"
 #include "opendeck_bridge.hpp"
 #include "plugin_catalog_model.hpp"
 #include "plugin_debug_service.hpp"
 #include "profile_controller.hpp"
 #include "qt_executor.hpp"
 #include "settings_service.hpp"
-#include "mouse_service.hpp"
 #include "stream_dock_control_service.hpp"
 #include "stream_dock_input_service.hpp"
 
@@ -279,11 +279,11 @@ private:
                     ///< dynamic_cast to IFirmwareLightingCapable inside the
                     ///< service to enumerate / activate modes.
     std::unique_ptr<SettingsService>
-        m_settings; ///< 2026-05-18: AK980 PRO ISettingsCapable bridge
-                    ///< (issue #57). Same DeviceLookup pattern as
-                    ///< LightingService; dynamic_cast to ISettingsCapable
-                    ///< inside the service to push / read the AK-series
-                    ///< settings batch (fn-layer / sleep / response).
+        m_settings;                        ///< 2026-05-18: AK980 PRO ISettingsCapable bridge
+                                           ///< (issue #57). Same DeviceLookup pattern as
+                                           ///< LightingService; dynamic_cast to ISettingsCapable
+                                           ///< inside the service to push / read the AK-series
+                                           ///< settings batch (fn-layer / sleep / response).
     std::unique_ptr<MouseService> m_mouse; ///< QML bridge for mouse DPI/polling/LOD.
     std::unique_ptr<BatteryService>
         m_battery; ///< 2026-05-18: per-device battery polling for wireless
