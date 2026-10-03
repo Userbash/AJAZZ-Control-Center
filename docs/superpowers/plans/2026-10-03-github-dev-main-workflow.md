@@ -3,8 +3,9 @@
 ## Goal
 
 Use `dev` as the integration and default branch, and accept changes into
-`main` only through a pull request with successful CI checks. Keep release
-workflows and tags on `main`.
+`main` only through a pull request with successful CI checks. The normal
+release path is `dev` to `main`, while reviewed in-repository topic branches
+may target `main` for an urgent fix. Keep release workflows and tags on `main`.
 
 ## Work
 

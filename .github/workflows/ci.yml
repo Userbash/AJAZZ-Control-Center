@@ -23,15 +23,14 @@ jobs:
     runs-on: ubuntu-24.04
     if: github.event_name == 'pull_request'
     steps:
-      - name: Require dev as the source for main
+      - name: Validate source repository for main
         env:
           BASE_REF: ${{ github.event.pull_request.base.ref }}
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
           HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
           if [[ "$BASE_REF" == "main" ]]; then
-            if [[ "$HEAD_REF" != "dev" || "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]]; then
-              echo "::error::Pull requests into main must come from this repository's dev branch."
+            if [[ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]]; then
+              echo "::error::Pull requests into main must come from this repository."
               exit 1
             fi
           fi

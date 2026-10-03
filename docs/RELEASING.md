@@ -13,10 +13,10 @@ ______________________________________________________________________
 
 Two long-lived branches:
 
-| Branch | Role                                                                                 |
-| ------ | ------------------------------------------------------------------------------------ |
-| `dev`  | **Integration / default branch.** All work merges here first.                        |
-| `main` | **Release-only.** Receives a promotion PR from `dev`, then carries the release tags. |
+| Branch | Role                                                                                                                  |
+| ------ | --------------------------------------------------------------------------------------------------------------------- |
+| `dev`  | **Integration / default branch.** All work merges here first.                                                         |
+| `main` | **Release branch.** Receives reviewed PRs from `dev` or an in-repository topic branch, then carries the release tags. |
 
 Flow:
 
@@ -28,8 +28,9 @@ chore/…┘
 
 - Cut short-lived topic branches **off `dev`** (`feat/…`, `fix/…`,
   `docs/…`, `chore/…`) and open a PR **into `dev`**.
-- `main` **never** receives feature PRs directly — only the `dev → main`
-  promotion PR (see §3).
+- Pull requests into `main` must come from this repository and pass the full
+  required check set. The normal release path remains `dev → main`; a fix may
+  target `main` directly from a topic branch when needed.
 - Both branches are protected: no direct pushes, no force-push, PR required.
   Never push directly to `dev` or `main`.
 
@@ -53,7 +54,7 @@ All workflows live in [`.github/workflows/`](../.github/workflows/).
 `clang-tidy (static analysis)`, `docs (markdown + links)`,
 `Build ubuntu-24.04 · Release`, `Build windows-2022 · Release`, and
 `Build macos-14 · Release`. The CI `Promotion source` check also requires PRs
-into `main` to come from this repository's `dev` branch. Sanitizers and
+into `main` to come from this repository. Sanitizers and
 coverage are informational and are not required for merge. Fix any failing
 required check before merging.
 
