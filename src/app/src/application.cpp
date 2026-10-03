@@ -197,6 +197,18 @@ Application::Application(QObject* parent)
               return nullptr;
           },
           this)),
+      m_mouse(std::make_unique<MouseService>(
+          [this](QString const& codename) -> std::shared_ptr<core::IDevice> {
+              auto const descriptors = m_deviceRegistry.enumerate();
+              for (auto const& d : descriptors) {
+                  if (QString::fromStdString(d.codename) == codename) {
+                      return m_deviceRegistry.open(core::DeviceId{
+                          .vendorId = d.vendorId, .productId = d.productId, .serial = {}});
+                  }
+              }
+              return nullptr;
+          },
+          this)),
       // 2026-05-18 P3.d: BatteryService gets the same DeviceLookup pattern
       // (codename -> shared_ptr<IDevice>) used by TimeSyncService and
       // LightingService. The enumerator returns the codenames of currently-
@@ -1443,6 +1455,7 @@ void Application::exposeToQml(QQmlApplicationEngine& engine) {
     TimeSyncService::registerInstance(m_timeSync.get());
     LightingService::registerInstance(m_lighting.get());
     SettingsService::registerInstance(m_settings.get());
+    MouseService::registerInstance(m_mouse.get());
     BatteryService::registerInstance(m_battery.get());
     AppUpdateService::registerInstance(m_appUpdate.get());
     FirmwareUpdateService::registerInstance(m_firmwareUpdate.get());

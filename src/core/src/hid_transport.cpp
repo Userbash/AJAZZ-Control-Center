@@ -14,7 +14,9 @@
 #include <algorithm>
 #include <array>
 #include <atomic>
+#include <cerrno>
 #include <cstdint>
+#include <cstring>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -77,6 +79,7 @@ public:
         // plain hid_open path if no interface matches (e.g. Linux hidraw, where
         // usage_page may be unpopulated for non-primary collections).
         char const* matchKind = "first-interface";
+        int openErrno = 0;
         if (m_usagePage != 0) {
             std::string matchPath;
             if (hid_device_info* head = ::hid_enumerate(m_vid, m_pid)) {
@@ -114,15 +117,30 @@ public:
             }
             if (!matchPath.empty()) {
                 m_handle = ::hid_open_path(matchPath.c_str());
+                if (!m_handle) {
+                    openErrno = errno;
+                }
             }
         }
         if (!m_handle) {
             std::wstring const wserial = utf8ToWide(m_serial);
             m_handle = ::hid_open(m_vid, m_pid, m_serial.empty() ? nullptr : wserial.c_str());
             matchKind = "first-interface";
+            if (!m_handle) {
+                openErrno = errno;
+            }
         }
         if (!m_handle) {
-            throw std::runtime_error("hid_open failed");
+            std::string message = "hid_open failed";
+            if (openErrno != 0) {
+                message += ": ";
+                message += std::strerror(openErrno);
+                if (openErrno == EACCES) {
+                    message +=
+                        " (check the installed AJAZZ udev rule and hidraw ACLs)";
+                }
+            }
+            throw std::runtime_error(message);
         }
         // Enable non-blocking mode so zero-timeout reads return immediately.
         ::hid_set_nonblocking(m_handle, 1);

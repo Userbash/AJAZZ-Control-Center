@@ -17,6 +17,9 @@ add_executable(
     test_debug_control_server.cpp
     ${CMAKE_SOURCE_DIR}/src/app/src/debug_control_server.cpp
     test_device_registry.cpp
+    test_linux_udev_rules.cpp
+    test_mouse_service.cpp
+    ${CMAKE_SOURCE_DIR}/src/app/src/mouse_service.cpp
     # ARCH-04 (Phase 09): host-side RGBA→JPEG/PNG pipeline. Locks JPEG/PNG magic bytes,
     # rotation/mirror transforms (AKP153 Rot90+mirror, AKP815 Rot180), and validation
     # contracts (zero-area, dim mismatch).
@@ -452,6 +455,10 @@ set_source_files_properties(
 # other test-only hooks behind the same guard. Production ajazz_core builds never define this, so
 # the symbols disappear from the library ABI entirely.
 target_compile_definitions(ajazz_unit_tests PRIVATE AJAZZ_TESTING)
+set_source_files_properties(
+    test_linux_udev_rules.cpp
+    PROPERTIES COMPILE_DEFINITIONS "AJAZZ_TEST_REPO_ROOT=\"${CMAKE_SOURCE_DIR}\""
+)
 
 # Set the AUTOMOC flag for the fetcher TU we pull in from the app target — StreamdockCatalogFetcher
 # is a Q_OBJECT so it needs moc to run.

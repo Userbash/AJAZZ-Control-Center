@@ -59,6 +59,28 @@ and attach it to the issue.
    make doctor
    ```
 
+## Mouse settings do not survive Apply
+
+The Mouse tab sends the DPI table, polling rate and lift-off distance only
+when the device is connected and the user presses **Apply**. Check the log for
+both messages below:
+
+```text
+[mouse.aj_series] settings omnibus sent: lod=...
+[mouse-service] applied codename=... dpiStages=... pollingRate=... liftOff=...
+```
+
+The first line confirms that the AJ-series firmware packet was written. The
+second line confirms that the host accepted and persisted the same batch. The
+values are kept in the per-user Qt settings file, not in the profile JSON. This
+is deliberate: profile JSON stores bindings and macros, while mouse firmware
+settings are device-scoped.
+
+If the `mouse-service` line is absent, confirm that the Mouse tab is open for
+the connected device. If the log says that the device is not connected or does
+not support mouse settings, refresh the device list and check the hidraw ACL.
+If `hid_open failed` appears, follow the udev steps above before retrying.
+
 ## Windows: device is detected but no input / no display
 
 - Exit the AJAZZ vendor app completely (check the system tray).

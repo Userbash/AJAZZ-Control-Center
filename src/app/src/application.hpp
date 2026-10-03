@@ -29,6 +29,7 @@
 #include "profile_controller.hpp"
 #include "qt_executor.hpp"
 #include "settings_service.hpp"
+#include "mouse_service.hpp"
 #include "stream_dock_control_service.hpp"
 #include "stream_dock_input_service.hpp"
 
@@ -283,6 +284,7 @@ private:
                     ///< LightingService; dynamic_cast to ISettingsCapable
                     ///< inside the service to push / read the AK-series
                     ///< settings batch (fn-layer / sleep / response).
+    std::unique_ptr<MouseService> m_mouse; ///< QML bridge for mouse DPI/polling/LOD.
     std::unique_ptr<BatteryService>
         m_battery; ///< 2026-05-18: per-device battery polling for wireless
                    ///< IBatteryCapable devices (AK980 PRO today). Owns a

@@ -91,10 +91,35 @@ ______________________________________________________________________
 | Profiles | Switch device profiles; per-app auto-switch planned | 🟢 working |
 | Time-sync | Push host time to firmware RTCs; 15-min periodic auto-sync | 🟢 working |
 | Battery level | Wireless charge readout (see device notes for caveats) | 🟠 partial |
+| Mouse settings | Save and apply AJ159/AJ-series DPI stages, polling rate and lift-off distance | 🟢 working |
 | Firmware updates | Auto-download + delegate flashing to the vendor tool | 🟡 planned |
 | Python plugins | Out-of-process, sandboxed (`bwrap` / `sandbox-exec` / AppContainer) | 🟢 working |
 | Stream Deck plugins | In-app store mirrors AJAZZ Streamdock (~160) + OpenDeck (~320) catalogues | 🟢 working |
 | Cross-platform UX | Native notifications + autostart on Linux / macOS / Windows | 🟢 working |
+
+______________________________________________________________________
+
+## Mouse settings
+
+For supported AJ-series mice, the **Mouse** tab edits the complete host-side
+configuration batch:
+
+- eight DPI stages, constrained to the firmware range of 50-42000 DPI;
+- polling rates advertised by the device, including 125 through 8000 Hz on
+  the AJ159 APEX 8K;
+- lift-off distance (1 or 2 mm for the current AJ-series firmware).
+
+Press **Apply** to send the values to the mouse over HID. The application also
+stores the last applied values in the per-user Qt settings store, so the same
+configuration is restored when the application is restarted. The profile JSON
+continues to hold key, encoder and macro bindings; mouse firmware settings are
+kept in the device-scoped settings store because the firmware exposes them as a
+separate configuration surface.
+
+If Apply reports success but the hardware does not change, inspect the runtime
+log for `mouse-service` and `mouse.aj_series` entries. A successful operation
+contains both the applied values and the firmware packet confirmation. On Linux,
+also verify the hidraw ACL described in [Linux troubleshooting](docs/wiki/Troubleshooting.md#linux-device-is-not-detected).
 
 ______________________________________________________________________
 
