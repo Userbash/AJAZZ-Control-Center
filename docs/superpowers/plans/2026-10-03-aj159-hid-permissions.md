@@ -1,52 +1,53 @@
 # AJ159 HID permissions recovery
 
-## Цель
+## Goal
 
-Устранить отказ `hid_open failed` для AJAZZ AJ159 APEX (`0x3151:0x5007`),
-зафиксированный в видео `Video_2026-10-03_11-39-26.mp4` и журнале приложения.
+Resolve the `hid_open failed` error for the AJAZZ AJ159 APEX
+(`0x3151:0x5007`) recorded in `Video_2026-10-03_11-39-26.mp4` and the
+application log.
 
-## Подтверждённое состояние
+## Confirmed state
 
-- Устройство присутствует в USB и HID enumeration.
-- Приложение корректно выбирает vendor collection `usage page 0xFFFF`,
+- The device is present in USB and HID enumeration.
+- The application selects the vendor collection with `usage page 0xFFFF` and
   `usage 0x02`.
-- Узлы `/dev/hidraw0..2` принадлежат `root:root` и имеют режим `0600`, без
-  ACL для пользователя `sanya`.
-- В `/etc/udev/rules.d` отсутствует правило AJAZZ; установленный в
-  `~/.local/lib/udev` файл udev не загружается системой.
-- Поэтому UI видит устройство по enumeration, но операции открытия, батареи,
-  времени и записи параметров завершаются отказом доступа.
+- `/dev/hidraw0..2` are owned by `root:root` with mode `0600` and have no ACL
+  entry for user `sanya`.
+- There is no AJAZZ rule under `/etc/udev/rules.d`; the udev file installed in
+  `~/.local/lib/udev` is not loaded by the system.
+- As a result, the UI detects the device through enumeration, but opening it
+  and reading battery/time data or writing settings fail with access denied.
 
-## Решение
+## Resolution
 
-1. Оставить udev installation ответственностью верхнего CMake-уровня и убрать
-   дублирующее правило из app-level install, чтобы пользовательский prefix не
-   создавал ложное ощущение активной системной настройки.
-1. Добавить в HID transport контекст ошибки `EACCES` с рекомендацией проверить
-   системное правило.
-1. Добавить регрессионный тест содержимого правила для VID `3151`.
-1. Установить правило на текущей системе, перезагрузить udev и проверить ACL.
+1. Keep udev installation owned by the top-level CMake configuration and
+   remove the duplicate app-level install rule. A user-level prefix must not
+   imply that a system-level setting is active.
+1. Add an `EACCES` hint to HID transport errors that points to the system udev
+   rule.
+1. Add a regression test that checks the rule for VID `3151`.
+1. Install the rule on the current system, reload udev, and verify the ACL.
 
-## Проверки
+## Verification
 
-- Catch2-регрессия udev-правила.
-- Release build через `make release`.
-- `ctest --preset release -R ...` для затронутого теста.
-- Smoke test: запуск установленного бинарника с bounded timeout и проверка,
-  что он проходит bootstrap без немедленного падения.
+- Catch2 regression test for the udev rule.
+- Release build with `make release`.
+- Run the focused regression test with `ctest --preset release -R ...`.
+- Smoke test: launch the installed binary with a bounded timeout and verify
+  that it completes startup without an immediate crash.
 
-## Риски и откат
+## Risks and rollback
 
-Изменения ограничены установочной конфигурацией, диагностикой HID и тестом.
-Откат кода выполняется revert затронутых файлов; системное udev-правило
-удаляется отдельной командой из `/etc/udev/rules.d` с последующим reload.
+The changes are limited to installation configuration, HID diagnostics, and
+tests. Revert the affected files to roll back the code. Remove the system udev
+rule separately from `/etc/udev/rules.d`, then reload the rules.
 
-## Результат выполнения
+## Execution results
 
-- Системное правило установлено в `/etc/udev/rules.d/70-ajazz.rules`, udev
-  перезагружен, на `/dev/hidraw0..2` появился ACL `user:sanya:rw-`.
-- `make release` завершён успешно.
-- Регрессионный тест и полный CTest прошли: `874/874`.
-- Smoke test установленного `/usr/local/bin/ajazz-control-center` на Wayland
-  прошёл bootstrap и открыл `VID=3151 PID=5007` через `usage+page filtered`;
-  процесс остановлен bounded timeout `12s`.
+- Installed the system rule at `/etc/udev/rules.d/70-ajazz.rules` and reloaded
+  udev. The `/dev/hidraw0..2` nodes received the `user:sanya:rw-` ACL.
+- `make release` completed successfully.
+- The regression test and full CTest suite passed: `874/874`.
+- The installed `/usr/local/bin/ajazz-control-center` passed startup on
+  Wayland and opened `VID=3151 PID=5007` using `usage+page filtered`. The
+  process was stopped after a bounded `12s` timeout.

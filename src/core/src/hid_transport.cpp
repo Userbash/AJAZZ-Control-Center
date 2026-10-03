@@ -10,13 +10,13 @@
  */
 #include "ajazz/core/logger.hpp"
 #include "ajazz/core/transport.hpp"
+#include "hid_transport_error.hpp"
 
 #include <algorithm>
 #include <array>
 #include <atomic>
 #include <cerrno>
 #include <cstdint>
-#include <cstring>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -131,15 +131,7 @@ public:
             }
         }
         if (!m_handle) {
-            std::string message = "hid_open failed";
-            if (openErrno != 0) {
-                message += ": ";
-                message += std::strerror(openErrno);
-                if (openErrno == EACCES) {
-                    message += " (check the installed AJAZZ udev rule and hidraw ACLs)";
-                }
-            }
-            throw std::runtime_error(message);
+            throw std::runtime_error(detail::hidOpenErrorMessage(openErrno));
         }
         // Enable non-blocking mode so zero-timeout reads return immediately.
         ::hid_set_nonblocking(m_handle, 1);
