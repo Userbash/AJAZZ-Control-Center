@@ -3,14 +3,14 @@
  * @file test_linux_udev_rules.cpp
  * @brief Regression checks for Linux HID access rules shipped with the project.
  */
-#include <catch2/catch_test_macros.hpp>
-
 #include <fstream>
 #include <sstream>
 #include <string>
 
+#include <catch2/catch_test_macros.hpp>
+
 #ifndef AJAZZ_TEST_REPO_ROOT
-#    error "AJAZZ_TEST_REPO_ROOT must be defined by the test build"
+#error "AJAZZ_TEST_REPO_ROOT must be defined by the test build"
 #endif
 
 namespace {

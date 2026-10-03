@@ -456,8 +456,8 @@ set_source_files_properties(
 # the symbols disappear from the library ABI entirely.
 target_compile_definitions(ajazz_unit_tests PRIVATE AJAZZ_TESTING)
 set_source_files_properties(
-    test_linux_udev_rules.cpp
-    PROPERTIES COMPILE_DEFINITIONS "AJAZZ_TEST_REPO_ROOT=\"${CMAKE_SOURCE_DIR}\""
+    test_linux_udev_rules.cpp PROPERTIES COMPILE_DEFINITIONS
+                                         "AJAZZ_TEST_REPO_ROOT=\"${CMAKE_SOURCE_DIR}\""
 )
 
 # Set the AUTOMOC flag for the fetcher TU we pull in from the app target — StreamdockCatalogFetcher
