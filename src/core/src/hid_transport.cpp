@@ -136,8 +136,7 @@ public:
                 message += ": ";
                 message += std::strerror(openErrno);
                 if (openErrno == EACCES) {
-                    message +=
-                        " (check the installed AJAZZ udev rule and hidraw ACLs)";
+                    message += " (check the installed AJAZZ udev rule and hidraw ACLs)";
                 }
             }
             throw std::runtime_error(message);
