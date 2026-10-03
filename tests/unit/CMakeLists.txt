@@ -6,6 +6,7 @@ add_executable(
     test_opendeck_bridge.cpp
     ${CMAKE_SOURCE_DIR}/src/app/src/opendeck_shaping.cpp
     test_logger.cpp
+    test_hid_transport_error.cpp
     # Debug epic Phase 1: tee / ring-buffer / file LogSink building blocks.
     test_log_sinks.cpp
     # Debug epic Phase 1: pure Qt->core log mapping + level parsing (the
@@ -380,6 +381,7 @@ target_include_directories(ajazz_unit_tests PRIVATE ${CMAKE_SOURCE_DIR}/src/plug
 # debouncer (no native backend TU, no Wayland/X11 link) — the unit suite verifies the coalescing
 # contract the live backends layer on top of, driven via QSignalSpy::wait / QTest::qWait.
 target_include_directories(ajazz_unit_tests PRIVATE ${CMAKE_SOURCE_DIR}/src/app/src)
+target_include_directories(ajazz_unit_tests PRIVATE ${CMAKE_SOURCE_DIR}/src/core/src)
 target_compile_definitions(ajazz_unit_tests PRIVATE AJAZZ_FEATURE_ACTIVE_WINDOW=1)
 
 if(WIN32)

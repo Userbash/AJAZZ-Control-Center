@@ -7,8 +7,8 @@
 <p align="center"><em>One open, cross-platform control center for every AJAZZ device.</em></p>
 
 <p align="center">
-  <a href="https://github.com/Aiacos/ajazz-control-center/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/Aiacos/ajazz-control-center/ci.yml?branch=main&label=CI&logo=github" alt="CI"></a>
-  <a href="https://github.com/Aiacos/ajazz-control-center/releases"><img src="https://img.shields.io/github/v/release/Aiacos/ajazz-control-center?include_prereleases&logo=github&color=blueviolet" alt="Release"></a>
+  <a href="https://github.com/Userbash/AJAZZ-Control-Center/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/Userbash/AJAZZ-Control-Center/ci.yml?branch=dev&label=CI&logo=github" alt="CI"></a>
+  <a href="https://github.com/Userbash/AJAZZ-Control-Center/releases"><img src="https://img.shields.io/github/v/release/Userbash/AJAZZ-Control-Center?include_prereleases&logo=github&color=blueviolet" alt="Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="License"></a>
   <a href="https://www.qt.io/"><img src="https://img.shields.io/badge/Qt-6.7%2B-41CD52?logo=qt" alt="Qt 6.7+"></a>
 </p>
@@ -32,9 +32,9 @@ ______________________________________________________________________
 
 ## Installation
 
-Download the latest build from the **[Releases page](https://github.com/Aiacos/ajazz-control-center/releases)**.
+Download the latest build from the **[Releases page](https://github.com/Userbash/AJAZZ-Control-Center/releases)**.
 Rolling pre-release builds for every push to `main` are published as the
-**[nightly release](https://github.com/Aiacos/ajazz-control-center/releases/tag/nightly)**.
+**[nightly release](https://github.com/Userbash/AJAZZ-Control-Center/releases/tag/nightly)**.
 
 ### Linux
 
@@ -58,7 +58,7 @@ flatpak install --user ./ajazz-control-center.flatpak
 ### Windows
 
 Download the `.msi` installer (or the portable `.zip`) from the
-[latest release](https://github.com/Aiacos/ajazz-control-center/releases/latest)
+[latest release](https://github.com/Userbash/AJAZZ-Control-Center/releases/latest)
 and run it — no drivers required. SmartScreen may warn while the installer is
 unsigned: choose **More info → Run anyway**.
 
@@ -73,7 +73,7 @@ choco  install ajazz-control-center        # coming soon (pending moderation)
 ### macOS
 
 Download the universal `.dmg` (Apple Silicon + Intel) from the
-[latest release](https://github.com/Aiacos/ajazz-control-center/releases/latest),
+[latest release](https://github.com/Userbash/AJAZZ-Control-Center/releases/latest),
 drag the app to **Applications**, and grant **Input Monitoring** on first launch.
 
 > Prefer to compile it yourself? See [Build from source](#build-from-source) below.
@@ -251,7 +251,7 @@ ______________________________________________________________________
 ## Build from source
 
 ```bash
-git clone https://github.com/Aiacos/ajazz-control-center.git
+git clone https://github.com/Userbash/AJAZZ-Control-Center.git
 cd ajazz-control-center
 make bootstrap     # detects your OS, installs deps + udev rule, builds
 make run           # launches the app
