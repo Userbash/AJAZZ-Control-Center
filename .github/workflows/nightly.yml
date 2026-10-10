@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # Packaged artifacts must carry the OpenDeck SPA (webui submodule)
           # and the bundled sysmon plugin (btop submodule) — without this the
@@ -51,7 +51,7 @@ jobs:
               libwayland-dev wayland-protocols libx11-dev \
               g++-14 \
               python3-dev rpm file
-      - uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730  # v4.3.1
+      - uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125  # v4.4.1
         with:
           version: 6.8.3
           cache: true
@@ -78,7 +78,7 @@ jobs:
         run: |
           cpack -G DEB
           cpack -G RPM
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
           name: nightly-linux
           retention-days: 1     # downloaded immediately by publish job, then disposable
@@ -94,14 +94,14 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # Packaged artifacts must carry the OpenDeck SPA (webui submodule)
           # and the bundled sysmon plugin (btop submodule) — without this the
           # webui/bundle CMake blocks silently skip and ship a bare app.
           submodules: recursive
       - uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756  # v1.13.0
-      - uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730  # v4.3.1
+      - uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125  # v4.4.1
         with:
           version: 6.8.3
           cache: true
@@ -151,7 +151,7 @@ jobs:
             throw "Qt runtime missing from Windows package: $($missing -join ', '). windeployqt did not populate the install tree."
           }
           Write-Host "OK: Qt runtime bundled ($($required -join ', '))"
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
           name: nightly-windows
           retention-days: 1     # see nightly-linux
@@ -167,7 +167,7 @@ jobs:
     runs-on: macos-14
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           # Packaged artifacts must carry the OpenDeck SPA (webui submodule)
           # and the bundled sysmon plugin (btop submodule) — without this the
@@ -175,7 +175,7 @@ jobs:
           submodules: recursive
       - name: Install deps
         run: brew install ninja create-dmg
-      - uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730  # v4.3.1
+      - uses: jurplel/install-qt-action@a9c63c7c123f3069cff414e7e482d95dfa9d8125  # v4.4.1
         with:
           version: 6.8.3
           cache: true
@@ -219,7 +219,7 @@ jobs:
             sleep 10
           done
           cpack -G TGZ
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
         with:
           name: nightly-macos
           retention-days: 1     # see nightly-linux
@@ -236,12 +236,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           fetch-depth: 0
           submodules: recursive
 
-      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
         with: { path: dist }
 
       - name: List artifacts
@@ -283,7 +283,7 @@ jobs:
           git push origin -f nightly
 
       - name: Publish / update release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b  # v3.0.1
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64  # v3.0.3
         with:
           tag_name: nightly
           name: "Nightly · ${{ github.sha }}"
